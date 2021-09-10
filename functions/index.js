@@ -11,7 +11,10 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 
 const {
   getAllEvents,
+  postOneEvent,
 } = require("./API/events");
 
 app.get("/events", getAllEvents);
+app.post("/events", postOneEvent);
+
 exports.api = functions.https.onRequest(app);
