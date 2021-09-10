@@ -12,9 +12,13 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 const {
   getAllEvents,
   postOneEvent,
+  deleteEvent,
+  editEvent,
 } = require("./API/events");
 
 app.get("/events", getAllEvents);
 app.post("/events", postOneEvent);
+app.delete("/events/:eventId", deleteEvent);
+app.put("/events/:eventId", editEvent);
 
 exports.api = functions.https.onRequest(app);

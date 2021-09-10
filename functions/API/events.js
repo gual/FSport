@@ -57,3 +57,43 @@ exports.postOneEvent = (request, response) => {
       response.status(500).json({error: "Something went wrong"});
     });
 };
+
+exports.deleteEvent = (request, response) => {
+  const document = db.doc(`/events/${request.params.eventId}`);
+  document
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return response.status(404).json({error: "Event not found"});
+      }
+
+      return document.delete();
+    })
+    .then(() => {
+      response.json({message: "Event deleted successfully"});
+    })
+    .catch((err) => {
+      functions.logger.error("Error deleting event", err);
+
+      return response.status(500).json({error: err.code});
+    });
+};
+
+exports.editEvent = ( request, response ) => {
+  if (request.body.eventId || request.body.createdAt) {
+    response.status(403).json({message: "Not allowed to edit"});
+  }
+
+  const document = db.collection("events").doc(`${request.params.eventId}`);
+
+  document
+    .update(request.body)
+    .then(()=> {
+      response.json({message: "Event updated successfully"});
+    })
+    .catch((err) => {
+      functions.logger.error("Error editing event", err);
+
+      return response.status(500).json({error: err.code});
+    });
+};
