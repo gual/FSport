@@ -22,10 +22,7 @@ exports.getAllEvents = (request, response) => {
       return response.json(events);
     })
     .catch((err) => {
-      functions.logger.error(
-        "Error retrieving event",
-        err
-      );
+      functions.logger.error("Error retrieving event", err);
 
       return response.status(500).json({error: err.code});
     });
